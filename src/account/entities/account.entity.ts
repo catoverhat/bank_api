@@ -1,20 +1,21 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 
+
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => User, (user) => user.accounts)
-  // user: User;
+  @ManyToOne(() => User, (user) => user.accounts)
+  user: User;
 
-  @Column()
-  account: string;
+  @Column({ nullable: false, default: '' })
+  uuid: string;
 
-  @Column()
+  @Column({ nullable: false, default: 0 })
   balance: number;
 
-  @Column({default:true})
+  @Column({ default: true })
   state: boolean;
 }

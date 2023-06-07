@@ -30,7 +30,7 @@ import { ReportingModule } from './reporting/reporting.module';
     TransactionModule,
     ReportingModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

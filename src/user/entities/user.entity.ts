@@ -9,6 +9,6 @@ export class User {
   @Column()
   username: string;
 
-  // @OneToMany(() => Account, account => account.user)
-  // accounts: Account[];
+  @OneToMany(() => Account, account => account.user)
+  accounts: Account[];
 }
