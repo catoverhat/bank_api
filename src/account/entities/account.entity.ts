@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 import { User } from '../../user/entities/user.entity';
 
 
@@ -11,11 +12,14 @@ export class Account {
   user: User;
 
   @Column({ nullable: false, default: '' })
+  @IsNotEmpty()
   uuid: string;
 
   @Column({ nullable: false, default: 0 })
+  @IsNumber()
   balance: number;
 
   @Column({ default: true })
+  @IsBoolean()
   state: boolean;
 }

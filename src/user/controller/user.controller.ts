@@ -8,15 +8,24 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { CreateUserDto } from '../dto/user.dto';
 import { User } from '../entities/user.entity';
 import { UserService } from '../services/user.service';
 import { Account } from 'src/account/entities/account.entity';
+import { Transactions } from 'src/transactions/transactions.entity';
+// import { QueryBus } from '@nestjs/cqrs';
+// import { GetUserQuery } from '../queries/impl/get-user.query';
 import { v4 as uuidv4 } from 'uuid';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly usersService: UserService) {}
+
+  // constructor(private readonly queryBus: QueryBus) {}
+
+  // @Get('all')
+  // async getAll() {
+  //   return await this.queryBus.execute(new GetUserQuery());
+  // }
   //get all users
   @Get()
   async findAll(): Promise<User[]> {
@@ -82,6 +91,7 @@ export class UserController {
   @Put(':id/accounts/add')
   async addBalance(@Param('id') id: number, @Body() balanceData: any) {
     return await this.usersService.addBalance(
+      id,
       balanceData.uuid,
       balanceData.amount,
     );
@@ -91,6 +101,7 @@ export class UserController {
   @Put(':id/accounts/transfer')
   async transferBalance(@Param('id') id: number, @Body() balanceData: any) {
     return await this.usersService.transferBalance(
+      id,
       balanceData.uuidFrom,
       balanceData.uuidTo,
       balanceData.amount,
@@ -100,9 +111,16 @@ export class UserController {
   // Disable account
   @Put(':id/account/state')
   async disableAccount(@Param('id') id: number, @Body() accountState: any) {
-    return await this.usersService.disableAccount(
-      accountState.uuid,
-      accountState.newState,
-    );
+    return await this.usersService.disableAccount(accountState.uuid);
+  }
+
+  @Get(':id/transactions')
+  async transactionHistory(@Param('id') id: number, userId: number) {
+    const user = await this.usersService.findAllByUserId(userId);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    } else {
+      return user;
+    }
   }
 }
