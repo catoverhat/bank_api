@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactions } from '../entities/transactions.entity';
@@ -13,7 +13,10 @@ export class TransactionService {
       where: { userId },
     });
     if (transactions.length === 0) {
-      throw new NotFoundException('No transactions found for the user!');
+      throw new HttpException(
+        'No transactions found for the user!',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return transactions;
@@ -29,7 +32,7 @@ export class TransactionService {
   async transactionHistory(userId: number) {
     const userLog = this.findAllByUserId(userId);
     if (!userLog) {
-      throw new NotFoundException('User does not exist!');
+      throw new HttpException('User does not exist!', HttpStatus.BAD_REQUEST);
     }
     return userLog;
   }
