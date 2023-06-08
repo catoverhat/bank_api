@@ -30,7 +30,7 @@ export class Transactions {
   @IsNumber()
   @IsPositive()
   amount: number;
-  
-  // @Column()
-  // date:Date
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  date: Date;
 }
